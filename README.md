@@ -68,7 +68,8 @@ Please refer to the project's documentation or README files for detailed instruc
 
 
 ## Preview
-![image](https://github.com/user-attachments/assets/ba98a67a-ebc9-4f82-b80a-8afc8c4bc677)
+![image](https://github.com/user-attachments/assets/e6ad711a-e766-4e69-b7a0-5e27200baaa3)
+
 
 
 
