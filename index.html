@@ -5,7 +5,66 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dynamic JSON-Driven Form</title>
-    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-container h1 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .form-field {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-field input {
+            display: block;
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-field input:invalid {
+            border-color: #e74c3c;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 0.75rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background: #2980b9;
+        }
+    </style>
 </head>
 
 <body>
@@ -14,7 +73,90 @@
         <form id="dynamicForm" novalidate></form>
     </div>
 
-    <script src="index.js"></script>
+    <script>
+        const formConfig = [
+            {
+                key: "user_name",
+                label: "Name",
+                type: "name",
+                maxLength: 50,
+                pattern: "[A-Za-z ]+",
+                title: "Please enter only letters and spaces",
+            },
+            {
+                key: "mobile_no",
+                label: "Mobile Number",
+                type: "mobile_number",
+                pattern: "^[6-9]\\d{9}$",
+                title: "Please enter a valid 10-digit mobile number starting with 6, 7, 8 or 9",
+            },
+            {
+                key: "email",
+                label: "Email",
+                type: "email",
+                title: "Please enter a valid email address",
+            },
+        ];
+
+        const form = document.getElementById("dynamicForm");
+
+        formConfig.forEach((field) => {
+            const wrapper = document.createElement("div");
+            wrapper.classList.add("form-field");
+
+            const label = document.createElement("label");
+            label.htmlFor = field.key;
+            label.textContent = field.label;
+            wrapper.appendChild(label);
+
+            const input = document.createElement("input");
+            input.id = field.key;
+            input.name = field.key;
+            input.required = true;
+
+            if (field.maxLength) input.maxLength = field.maxLength;
+            if (field.pattern) input.pattern = field.pattern;
+            if (field.title) input.title = field.title;
+
+            switch (field.type) {
+                case "text":
+                    input.type = "text";
+                    break;
+                case "name":
+                    input.type = "text";
+                    input.placeholder = "Enter your name";
+                    break;
+                case "email":
+                    input.type = "email";
+                    input.placeholder = "example@domain.com";
+                    break;
+                case "mobile_number":
+                    input.type = "tel";
+                    input.placeholder = "10-digit number";
+                    break;
+                default:
+                    input.type = field.type;
+            }
+
+            wrapper.appendChild(input);
+            form.appendChild(wrapper);
+        });
+
+        const submitBtn = document.createElement("button");
+        submitBtn.type = "submit";
+        submitBtn.textContent = "Submit";
+        form.appendChild(submitBtn);
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            if (form.checkValidity()) {
+                alert("Submitted successfully");
+                form.reset();
+            } else {
+                form.reportValidity();
+            }
+        });
+    </script>
 </body>
 
 </html>
